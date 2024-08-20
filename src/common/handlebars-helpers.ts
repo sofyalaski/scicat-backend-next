@@ -4,7 +4,7 @@
  * Helpers should be registered in app.module.ts
  */
 import { JobClass } from "src/jobs/schemas/job.schema";
-import { JobsConfigSchema } from "src/jobs/types/jobs-config-schema.enum";
+import { JobsParameters } from "src/jobs/types/jobs-params.enum";
 
 /**
  * Convert json objects to HTML
@@ -96,8 +96,8 @@ interface JobV3 {
  */
 export const job_v3 = (job: JobClass): JobV3 => {
   let datasetList: DatasetIdV3[];
-  if (JobsConfigSchema.DatasetIds in job.jobParams) {
-    const datasetIds = job.jobParams[JobsConfigSchema.DatasetIds] as string[];
+  if (JobsParameters.DatasetIds in job.jobParams) {
+    const datasetIds = job.jobParams[JobsParameters.DatasetIds] as string[];
     datasetList = datasetIds.map((pid) => ({
       pid: pid,
       files: [],

@@ -33,6 +33,7 @@ export class JobCreateInterceptor implements NestInterceptor {
    * Validate if the job has a matching configuration and is performable
    */
   async validateJob(createJobDto: CreateJobDto): Promise<JobConfig> {
+    console.log(createJobDto)
     // it should return a single job configuration
     const jobConfigs = configuration().jobConfiguration;
     const matchingConfig = jobConfigs.filter(

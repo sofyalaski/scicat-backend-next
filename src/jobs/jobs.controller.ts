@@ -24,6 +24,7 @@ import { CheckPolicies } from "src/casl/decorators/check-policies.decorator";
 import { AppAbility, CaslAbilityFactory } from "src/casl/casl-ability.factory";
 import { AuthOp } from "src/casl/authop.enum";
 import { CreateJobAuth } from "src/jobs/types/jobs-auth.enum";
+import { JobsParameters } from "src/jobs/types/jobs-params.enum";
 import { JobClass, JobDocument } from "./schemas/job.schema";
 import {
   ApiBearerAuth,
@@ -280,7 +281,7 @@ export class JobsController {
    * Check that the dataset ids list is valid
    */
   async checkDatasetIds(jobParams: Record<string, unknown>): Promise<string[]> {
-    const field = JobsConfigSchema.DatasetIds;
+    const field = JobsParameters.DatasetIds;
     const datasetIds = (
       typeof jobParams[field] === "string"
         ? Array(jobParams[field])
@@ -399,7 +400,7 @@ export class JobsController {
 
     // if datasetIds property in jobParams is passed, check if such IDs exist in data base
     let datasetIds: string[] = [];
-    if (JobsConfigSchema.DatasetIds in jobCreateDto.jobParams) {
+    if (JobsParameters.DatasetIds in jobCreateDto.jobParams) {
       datasetIds = await this.checkDatasetIds(jobCreateDto.jobParams);
     }
     if (user) {
@@ -590,7 +591,7 @@ export class JobsController {
   @CheckPolicies((ability: AppAbility) =>
     ability.can(AuthOp.JobCreate, JobClass),
   )
-  // @UseInterceptors(JobCreateInterceptor)
+  //@UseInterceptors(JobCreateInterceptor)
   @Post()
   @ApiOperation({
     summary: "It creates a new job.",

@@ -6,5 +6,5 @@ export enum JobsConfigSchema {
   Auth = "auth",
   Actions = "actions",
   ActionType = "actionType",
-  DatasetIds = "datasetIds",
+  JobParams = "jobParams",
 }
