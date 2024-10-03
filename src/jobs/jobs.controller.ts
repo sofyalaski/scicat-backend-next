@@ -294,15 +294,15 @@ export class JobsController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    if (datasetIds.length == 0) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: "List of passed dataset IDs is empty.",
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    // if (datasetIds.length == 0) {
+    //   throw new HttpException(
+    //     {
+    //       status: HttpStatus.BAD_REQUEST,
+    //       message: "List of passed dataset IDs is empty.",
+    //     },
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
 
     interface condition {
       where: {
@@ -604,6 +604,7 @@ export class JobsController {
    * Check for mismatches between the config version used to create the job and the currently loaded version.
    *
    * Currently this is only logged.
+   * @param jobConfig
    * @param jobInstance
    * @returns
    */

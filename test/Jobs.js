@@ -238,7 +238,7 @@ describe("1100: Jobs: Test New Job Model", () => {
       });
   });
   
-  it("0040: Add a new job as a user from ADMIN_GROUPS for himself/herself in '#all' configuration with no datasets in job parameters, which should fail", async () => {
+  it("0040: Add a new job as a user from ADMIN_GROUPS for himself/herself in '#all' configuration with no datasets in job parameters, which should fail.", async () => {
     const newDataset = {
       ...jobAll,
       ownerUser: "admin",
@@ -258,7 +258,7 @@ describe("1100: Jobs: Test New Job Model", () => {
       .expect("Content-Type", /json/)
       .then((res) => {
         res.body.should.not.have.property("id")
-        res.body.should.have.property("message").and.be.equal("List of passed dataset IDs is empty.");
+        res.body.should.have.property("message").and.be.equal("Invalid request. Requires 'jobParams.datasetIds[0]'");
       });
   });
 
@@ -285,7 +285,7 @@ describe("1100: Jobs: Test New Job Model", () => {
       });
   });
 
-  it("0060: Add a new job as a user from ADMIN_GROUPS for himself/herself in '#datasetPublic' configuration with no jobParams parameter, which should fail", async () => {
+  it("0060: Add a new job as a user from ADMIN_GROUPS for himself/herself in '#all' configuration with no jobParams parameter, which should fail", async () => {
     const newDataset = {
       type: "all_access",
       ownerUser: "admin",
@@ -304,9 +304,30 @@ describe("1100: Jobs: Test New Job Model", () => {
       });
   });
 
-  it("0065: Add a new job as a user from ADMIN_GROUPS for himself/herself in '#datasetPublic' configuration with empty jobParams parameter", async () => {
+  it("0065: Add a new job as a user from ADMIN_GROUPS for himself/herself in '#all' configuration with empty jobParams parameters, which should fail", async () => {
     const newDataset = {
       type: "all_access",
+      ownerUser: "admin",
+      ownerGroup: "admin",
+      jobParams: {
+      },
+    };
+
+    return request(appUrl)
+      .post("/api/v3/Jobs")
+      .send(newDataset)
+      .set("Accept", "application/json")
+      .set({ Authorization: `Bearer ${accessTokenAdmin}` })
+      .expect(TestData.BadRequestStatusCode)
+      .expect("Content-Type", /json/)
+      .then((res) => {
+        res.body.should.not.have.property("id")
+        res.body.should.have.property("message").and.be.equal("Invalid request. Requires 'jobParams.datasetIds[0]'");
+      });
+  });
+  it("0066: Add a new job as a user from ADMIN_GROUPS for himself/herself in '#datasetPupliv' configuration with empty jobParams parameter", async () => {
+    const newDataset = {
+      type: "public_access",
       ownerUser: "admin",
       ownerGroup: "admin",
       jobParams: {
