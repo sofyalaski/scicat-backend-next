@@ -83,12 +83,15 @@ export class CaslAbilityFactory {
     users: this.userEndpointAccess,
   };
 
-  endpointAccess(endpoint: string, user: JWTUser) {
+  endpointAccess(endpoint: string, user: JWTUser, jobType?: string) {
     const accessFunction = this.endpointAccessors[endpoint];
     if (!accessFunction) {
       throw new InternalServerErrorException(
         `No endpoint access policies defined for subject: ${endpoint}`,
       );
+    }
+    if (endpoint === "jobs") {
+      return accessFunction.call(this, user, jobType);
     }
     return accessFunction.call(this, user);
   }
@@ -368,26 +371,19 @@ export class CaslAbilityFactory {
     });
   }
 
-  jobsEndpointAccess(user: JWTUser) {
+  jobsEndpointAccess(user: JWTUser, jobType: string) {
     const { can, cannot, build } = new AbilityBuilder(
       createMongoAbility<PossibleAbilities, Conditions>,
     );
+    const jobConfig: JobConfig = this.jobConfigService.getJobConfig(jobType);
 
     if (!user) {
       /**
        * unauthenticated users
        */
 
-      // job creation
-      if (
-        Object.values(this.jobConfigService.allJobConfigs).some(
-          (j) => j.create.auth == CreateJobAuth.All,
-        )
-      ) {
-        can(Action.JobCreate, JobClass);
-      } else {
-        cannot(Action.JobCreate, JobClass);
-      }
+      // if jobType ==all
+      can(Action.JobCreate, JobClass)
       cannot(Action.JobRead, JobClass);
       if (
         Object.values(this.jobConfigService.allJobConfigs).some(

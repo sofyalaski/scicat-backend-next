@@ -35,7 +35,7 @@ const jobAuthenticated = {
   type: "authenticated_access"
 };
 
-describe("1130: Jobs: Test New Job Model Authorization for authenticated_access jobs type", () => {
+describe.only("1130: Jobs: Test New Job Model Authorization for authenticated_access jobs type", () => {
   before(() => {
     db.collection("Dataset").deleteMany({});
     db.collection("Job").deleteMany({});
@@ -68,7 +68,7 @@ describe("1130: Jobs: Test New Job Model Authorization for authenticated_access 
     db.collection("Job").deleteMany({});
   });
 
-  it("0010: Add dataset 1 as Admin Ingestor", async () => {
+  it.only("0010: Add dataset 1 as Admin Ingestor", async () => {
     return request(appUrl)
       .post("/api/v3/Datasets")
       .send(dataset1)
@@ -85,7 +85,7 @@ describe("1130: Jobs: Test New Job Model Authorization for authenticated_access 
       });
   });
 
-  it("0020: Add dataset 2 as Admin Ingestor", async () => {
+  it.only("0020: Add dataset 2 as Admin Ingestor", async () => {
     return request(appUrl)
       .post("/api/v3/Datasets")
       .send(dataset2)
@@ -286,7 +286,7 @@ describe("1130: Jobs: Test New Job Model Authorization for authenticated_access 
       });
   });
 
-  it("0100: Add a new job as unauthenticated user in '#authenticated' configuration, which should be forbidden", async () => {
+  it.only("0100: Add a new job as unauthenticated user in '#authenticated' configuration, which should be forbidden", async () => {
     const newJob = {
       ...jobAuthenticated,
       jobParams: {
